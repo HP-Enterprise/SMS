@@ -25,6 +25,7 @@ targetCompatibility = 1.8
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter:1.2.+")
+    compile ("com.google.code.gson:gson:2.2.+")
 }
 
 defaultTasks "build"

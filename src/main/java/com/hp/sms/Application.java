@@ -6,6 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.annotation.ComponentScan;
 
+import java.lang.System;
+
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.hp.sms"} )
 public class Application implements CommandLineRunner {
@@ -15,8 +17,6 @@ public class Application implements CommandLineRunner {
 
     public void run(String... args) throws Exception{
         System.out.println("com.hp.sms.Application.run...");
-
-        this._sms.Send("13912345678", "Hello SMS");
     }
 
     @Autowired
