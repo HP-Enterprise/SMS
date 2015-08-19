@@ -17,8 +17,6 @@ public class Application implements CommandLineRunner {
 
     public void run(String... args) throws Exception{
         System.out.println("com.hp.sms.Application.run...");
-        int result=this._sms.Send("1391234567", "Hello SMS中文测试");
-        System.out.println("发送结果:"+result);
     }
 
     @Autowired

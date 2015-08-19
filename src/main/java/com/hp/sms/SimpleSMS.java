@@ -2,8 +2,6 @@ package com.hp.sms;
 import com.sun.javafx.image.BytePixelSetter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
