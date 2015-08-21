@@ -1,5 +1,7 @@
 package com.hp.sms;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,7 +18,8 @@ public class Application implements CommandLineRunner {
     }
 
     public void run(String... args) throws Exception{
-        System.out.println("com.hp.sms.Application.run...");
+        Logger logger = LoggerFactory.getLogger(Application.class);
+        logger.info("Application is running...");
     }
 
     @Autowired
