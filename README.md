@@ -1,6 +1,8 @@
 # SMS
 实验性质的短信网关
 
+[![Build Status](https://travis-ci.org/HP-Enterprise/SMS.svg?branch=dev)](https://travis-ci.org/HP-Enterprise/SMS)
+
 ## 前提条件
 - [JDK 1.8+](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
 - [Gradle 2.5+](http://gradle.org/gradle-download/)
