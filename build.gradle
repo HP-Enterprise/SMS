@@ -28,4 +28,11 @@ dependencies {
     compile ("com.google.code.gson:gson:2.2.+")
 }
 
+javadoc {
+    options.encoding = "utf-8"
+    options.charSet = "utf-8"
+    options.locale = "en"
+    options.showFromPublic()
+}
+
 defaultTasks "build"
