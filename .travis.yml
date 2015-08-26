@@ -1,7 +1,17 @@
 language: java
+
 jdk:
     - oraclejdk8
+
 branches:
     only:
         - master
         - dev
+
+cache:
+    directories:
+        - $HOME/.m2
+
+notifications:
+    webhooks:
+        - https://hook.lesschat.com/travisci/7ad63757ebba468f9f533790680be40d
