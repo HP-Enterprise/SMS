@@ -11,7 +11,3 @@ branches:
 cache:
     directories:
         - $HOME/.gradle
-
-notifications:
-    webhooks:
-        - https://hook.lesschat.com/travisci/7ad63757ebba468f9f533790680be40d
