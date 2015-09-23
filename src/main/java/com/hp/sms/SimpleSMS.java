@@ -1,5 +1,7 @@
 package com.hp.sms;
 import com.sun.javafx.image.BytePixelSetter;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import java.io.*;
@@ -19,8 +21,16 @@ public class SimpleSMS {
 
     @Value("${com.hp.sms.ip}")
     private String _smsIP;
+
+    private Logger _logger;
+
     private static int RESULT_SUCCESS=1;
     private static int RESULT_FAILURE=0;
+
+
+    public SimpleSMS(){
+        this._logger = LoggerFactory.getLogger(SimpleSMS.class);
+    }
 
     public int Send(String sim, String content){
         String ADD_URL="http://"+ _smsIP +"/message/messageSend";
@@ -44,7 +54,7 @@ public class SimpleSMS {
             m.put("content", content);
             Gson gson=new Gson();
             String jsonstr=gson.toJson(m);
-            System.out.println(jsonstr);
+            this._logger.info(jsonstr);
             out.append(jsonstr);
             out.flush();
             out.close();
@@ -57,7 +67,7 @@ public class SimpleSMS {
                 lines = new String(lines.getBytes(), "utf-8");
                 sb.append(lines);
             }
-            System.out.println(sb);
+            this._logger.info(sb.toString());
             //{"status":"success"}
             //{"status":"failure"}
             reader.close();
@@ -69,7 +79,7 @@ public class SimpleSMS {
                 Gson gs=new Gson();
                 Map<String,String> resultMap = gs.fromJson(sb.toString(), new TypeToken<Map<String, String>>(){}.getType());
                 String status=resultMap.get("status");
-                System.out.println("status:"+status);
+                this._logger.info("status:"+status);
                if (status!=null) {
                    if (status.equals("success"))
                    return RESULT_SUCCESS;
