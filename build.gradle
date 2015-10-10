@@ -35,4 +35,8 @@ javadoc {
     options.showFromPublic()
 }
 
+run {
+    systemProperties System.getProperties()
+}
+
 defaultTasks "build"
