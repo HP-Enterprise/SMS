@@ -14,7 +14,7 @@
 - 默认激活dev配置,因此,可以在相同位置创建一个名为`application-dev.yml`的配置文件,按自己的需要重载配置项
 - 也可以通过定义一个名为spring.profiles.active的系统属性来指定激活的配置,例如:
 ```SHELL
-gradle -Dspring.profiles.active=product
+gradle -Dspring.profiles.active=product run
 ```
 那么 $/src/main/resources/application-product.yml 将被激活.
 
