@@ -1,0 +1,5 @@
+# SMS Gateway
+com.hp.sms.ip: 127.0.0.1
+
+# Spring
+spring.profiles.active: dev

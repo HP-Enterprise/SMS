@@ -1,4 +1,4 @@
-package com.hp.sms;
+package com.hp.sms.service;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,23 +15,21 @@ import com.google.gson.reflect.TypeToken;
 /**
  * 简单短信网关
  */
-@Service
-public class SimpleSMS {
+@Service("simpleSMS")
+public class SimpleSMS implements SmsService{
 
     @Value("${com.hp.sms.ip}")
     private String _smsIP;
 
-    private Logger _logger;
+    private Logger _logger=LoggerFactory.getLogger(SimpleSMS.class);
 
     private static int RESULT_SUCCESS=1;
     private static int RESULT_FAILURE=0;
 
 
-    public SimpleSMS(){
-        this._logger = LoggerFactory.getLogger(SimpleSMS.class);
-    }
-
-    public int Send(String sim, String content){
+    @Override
+    public int sendSms(String sim, String content){
+        _logger.info(_smsIP);
         String ADD_URL="http://"+ _smsIP +"/message/messageSend";
         try {
             //建立连接
