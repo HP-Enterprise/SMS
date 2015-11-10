@@ -113,7 +113,7 @@ public class OutputMessagerHandler extends ChannelInboundHandlerAdapter {
 			_logger.info(phone+">>>>>send msg:"+msgContent);
 			String cusMsisdn=phone;
 			MsgSubmit submit=new MsgSubmit();
-			submit.setTotalLength(12 + 8 + 1 + 1 + 1 + 1 + 10 + 1 + 32 + 1 + 1 + 1 + 1 + 6 + 2 + 6 + 17 + 17 + 21 + 1 + 32 + 1 + 1 + msgContent.length() + 20);
+			submit.setTotalLength(12 + 8 + 1 + 1 + 1 + 1 + 10 + 1 + 32 + 1 + 1 + 1 + 1 + 6 + 2 + 6 + 17 + 17 + 21 + 1 + 32 + 1 + 1 + msgContent.length() * 2 + 20);
 			submit.setCommandId(MsgCommand.CMPP_SUBMIT);
 			submit.setSequenceId(MsgUtils.getSequence());
 			//submit.setMsgId(1l);/////////////////////////////
@@ -139,9 +139,9 @@ public class OutputMessagerHandler extends ChannelInboundHandlerAdapter {
 			submit.setDestTerminalType((byte) 0);
 			submit.setMsgLength((byte) (msgContent.length()));
 			try{
-				submit.setMsgContent(msgContent.getBytes("gb2312"));
+				submit.setMsgContent(msgContent.getBytes("UnicodeBigUnmarked"));
 			}catch (UnsupportedEncodingException e){
-				submit.setMsgContent(msgContent.getBytes());
+				e.printStackTrace();
 			}
 			submit.setLinkID("");
 			return submit;

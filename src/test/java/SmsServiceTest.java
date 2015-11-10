@@ -36,7 +36,7 @@ public class SmsServiceTest {
     @Test
     public void test_cmpp(){
      System.out.println(">>>>>>>>>>>>>>>>>>>>>>>");
-     cmppSms.sendSms("13000001111","hello");
+     cmppSms.sendSms("13000001111","中国");
     }
    @Test
    public void test_cat(){
