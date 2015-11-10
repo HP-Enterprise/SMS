@@ -1,5 +1,33 @@
 # SMS Gateway
 com.hp.sms.ip: 127.0.0.1
-
-# Spring
-spring.profiles.active: dev
+# CMPP Gateway
+com.hp.cmpp.ip: 127.0.0.1
+com.hp.cmpp.port: 7890
+com.hp.cmpp.disabled: true
+#短信网关IP
+com.hp.cmpp.ismgIp: 127.0.0.1
+#访问短信网关需要的密码
+com.hp.cmpp.sharedSecret: 123456
+#由短信网关分配的SPID
+com.hp.cmpp.spId: 987654
+#短信网关端口，根据使用的CMPP协议不同而不同，如cmpp3.0长链接的端口为7890
+com.hp.cmpp.ismgPort: 7890
+#由短信网关分配的SPCODE,即用户接受到的短信显示的主叫号码
+com.hp.cmpp.spCode: 106123456
+#SOCKET超时链接时间，可根据需求自由修改，建议6000，单位为毫秒
+com.hp.cmpp.timeOut: 6000
+#SOCKET链接失败重试次数，及短信发送失败重新发送的次数
+com.hp.cmpp.connectCount: 3
+# Spring settings
+spring:
+    profiles.active: dev
+    redis:
+        host: 127.0.0.1
+        port: 6379
+        password:
+        database: 0
+        pool:
+            max-idle: 8
+            min-idle: 0
+            max-active: 8
+            max-wait: -1

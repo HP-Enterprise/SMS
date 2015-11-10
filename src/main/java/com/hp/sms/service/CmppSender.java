@@ -10,13 +10,13 @@ import org.springframework.stereotype.Service;
  */
 @Service("cmppSender")
 public class CmppSender implements SmsService{
-    @Value("${com.hp.sms.ip}")
-    private String _smsIP;
+    @Value("${com.hp.cmpp.ip}")
+    private String _cmppIP;
 
     private Logger _logger= LoggerFactory.getLogger(CmppSender.class);
     @Override
     public int sendSms(String sim, String content) {
-        _logger.info(_smsIP);
+        _logger.info(_cmppIP);
         return 0;
     }
 }
