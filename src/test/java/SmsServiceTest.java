@@ -17,9 +17,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @SpringApplicationConfiguration(classes = Application.class)
 
 public class SmsServiceTest {
-   @Autowired
+    @Autowired
     @Qualifier("cmppSender")
-    SmsService smsService;
+    SmsService cmppSms;
+
+   @Autowired
+   @Qualifier("simpleSMS")
+   SmsService simpleSMS;
+           ;
     @Before
     public void setUp() {
     }
@@ -29,9 +34,14 @@ public class SmsServiceTest {
     }
 
     @Test
-    public void test_(){
+    public void test_cmpp(){
      System.out.println(">>>>>>>>>>>>>>>>>>>>>>>");
-     smsService.sendSms("","");
+     cmppSms.sendSms("13000001111","hello");
     }
+   @Test
+   public void test_cat(){
+   System.out.println(">>>>>>>>>>>>>>>>>>>>>>>");
+    simpleSMS.sendSms("18071045790","haha");
+   }
 
 }

@@ -27,9 +27,7 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * @author Lilinfeng
- * @date 2014年3月15日
- * @version 1.0
+ * 发起鉴权校验
  */
 public class LoginAuthReqHandler extends ChannelInboundHandlerAdapter {
 	private SpInfo spInfo;

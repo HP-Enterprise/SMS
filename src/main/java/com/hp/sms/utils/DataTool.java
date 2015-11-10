@@ -19,10 +19,9 @@ import static io.netty.buffer.Unpooled.buffer;
 public class DataTool {
 
 
-    public static final String msgSendCount_preStr="msgSendCount:";
-    public static final String msgCurrentStatus_preStr="msgCurrentStatus:";
-    public static final String remote_cmd_value_preStr="remoteCommand";
-    public static final String out_cmd_preStr="output:";
+
+    public static final String smsout_preStr="smsoutput:";
+    public static final String smsin_preStr="smsinput:";
 
     private Logger _logger = LoggerFactory.getLogger(DataTool.class);
     public  boolean checkReg(byte[] bytes){

@@ -1,15 +1,13 @@
 package com.hp.sms.util;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
 import java.util.ResourceBundle;
 
 
 /**
  * 用于获取短信接口配置参数
  * 
- *
+ * @author 张科伟
+ * 
  */
 public class MsgConfig{
 	private static final ResourceBundle resourceBundle = ResourceBundle.getBundle("MsgConfig");

@@ -61,7 +61,11 @@ public class NettyClient {
                                     new LoginAuthReqHandler(spInfo,sharedInfo,socketRedis,dataTool));
                             ch.pipeline().addLast("HeartBeatHandler",
                                     new HeartBeatReqHandler(spInfo,sharedInfo,socketRedis,dataTool));
-                            ch.pipeline().addLast(new NettyClientHandler());
+                            ch.pipeline().addLast("OutputMessageHandler",
+                                    new OutputMessagerHandler(spInfo,sharedInfo,socketRedis,dataTool));
+                            ch.pipeline().addLast("InputMessageHandler",
+                                    new InputMessageHandler(spInfo,sharedInfo,socketRedis,dataTool));
+
                         }
                     });
             // 发起异步连接操作

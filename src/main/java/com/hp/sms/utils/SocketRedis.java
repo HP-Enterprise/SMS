@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-
+@Component
 public class SocketRedis {
 
     @Autowired

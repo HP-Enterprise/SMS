@@ -10,13 +10,13 @@ import org.springframework.data.redis.core.RedisTemplate;
 @Configuration("com.hp.sms.simpleConfig")
 @EnableAutoConfiguration
 class SimpleConfig {
-   /* @Autowired
-    private RedisConnectionFactory redisConnectionFactory;*/
+    @Autowired
+    private RedisConnectionFactory redisConnectionFactory;
 
-  /*  @Bean
+    @Bean
     public RedisTemplate<String, Object> objectRedisTemplate(){
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(redisConnectionFactory);
         return template;
-    }*/
+    }
 }

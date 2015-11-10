@@ -37,9 +37,8 @@ public class Application implements CommandLineRunner {
     DataTool dataTool;
     public static SharedInfo sharedInfo=new SharedInfo();
 
-  /*  @Autowired
-    SocketRedis socketRedis;*/
-  SocketRedis socketRedis=null;
+    @Autowired
+    SocketRedis socketRedis;
 
     @Autowired
     SpInfo spInfo;

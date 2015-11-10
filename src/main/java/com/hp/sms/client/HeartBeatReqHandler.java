@@ -33,9 +33,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author Lilinfeng
- * @date 2014年3月15日
- * @version 1.0
+ * 心跳
  */
 public class HeartBeatReqHandler extends ChannelInboundHandlerAdapter {
 
@@ -59,8 +57,7 @@ public class HeartBeatReqHandler extends ChannelInboundHandlerAdapter {
 	    throws Exception {
 		ByteBuf m = (ByteBuf) msg;
 		byte[] receiveData=dataTool.getBytesFromByteBuf(m);
-		String receiveDataHexString=dataTool.bytes2hex(receiveData);
-		_logger.info("Receive date from " + ctx.channel().remoteAddress() + ">>>:" + receiveDataHexString);
+
 		MsgHead message=new MsgHead(receiveData);
 	// 握手成功，主动发送心跳消息
 	if (message.getCommandId() == MsgCommand.CMPP_CONNECT_RESP) {
@@ -68,12 +65,15 @@ public class HeartBeatReqHandler extends ChannelInboundHandlerAdapter {
 	    	heartBeat = ctx.executor().scheduleAtFixedRate(
 		    new HeartBeatTask(ctx), 0, 10000,
 		    TimeUnit.MILLISECONDS);
+			_logger.info("------------------------------start HeartBeatTask");
 		}else{
 		_logger.info(">>>>>> not connected ");
 		}
+		ctx.fireChannelRead(msg);
 	} else if (message.getCommandId() == MsgCommand.CMPP_ACTIVE_TEST_RESP) {
 		_logger.info("Client receive server heart beat message : ---> "
 			  + message);
+		ctx.fireChannelRead(msg);
 	} else
 	    ctx.fireChannelRead(msg);
     }
@@ -90,7 +90,7 @@ public class HeartBeatReqHandler extends ChannelInboundHandlerAdapter {
 		MsgHead heatBeat = buildHeatBeat();
 
 		String byteStr=dataTool.bytes2hex(heatBeat.toByteArry());
-		_logger.info("Client send heart beat messsage to server : ---> "
+		_logger.info("Client send heart beat message to server : ---> "
 				+ byteStr);
 		ctx.writeAndFlush(dataTool.getByteBuf(byteStr));
 	 	}
