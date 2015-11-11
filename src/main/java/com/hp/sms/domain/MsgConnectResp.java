@@ -6,8 +6,6 @@ import java.io.IOException;
 
 import org.apache.log4j.Logger;
 
-import  com.hp.sms.util.CmppSender;
-
 /**
  * ISMG以CMPP_CONNECT_RESP消息响应SP的链接请求。<br/>
  * status响应状态状态 0：正确 1：消息结构错 2：非法源地址 3：认证错 4：版本太高 5~ ：其他错误<br/>

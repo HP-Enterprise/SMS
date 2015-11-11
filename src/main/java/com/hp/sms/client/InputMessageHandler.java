@@ -16,7 +16,7 @@
 package com.hp.sms.client;
 
 import com.hp.sms.domain.*;
-import com.hp.sms.util.MsgUtils;
+import com.hp.sms.utils.MsgUtils;
 import com.hp.sms.utils.DataTool;
 import com.hp.sms.utils.SocketRedis;
 import io.netty.buffer.ByteBuf;

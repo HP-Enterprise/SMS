@@ -16,6 +16,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.string.StringDecoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,6 +58,7 @@ public class NettyClient {
                         @Override
                         public void initChannel(SocketChannel ch)
                                 throws Exception {
+                            ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(1024,0,4,-4,0));
                             ch.pipeline().addLast("LoginAuthHandler",
                                     new LoginAuthReqHandler(spInfo,sharedInfo,socketRedis,dataTool));
                             ch.pipeline().addLast("HeartBeatHandler",

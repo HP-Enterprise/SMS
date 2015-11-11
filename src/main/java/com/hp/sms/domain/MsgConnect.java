@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import org.apache.log4j.Logger;
 
-import  com.hp.sms.util.MsgUtils;
+import com.hp.sms.utils.MsgUtils;
 
 /**
  * SP请求连接到ISMG消息体定义CMPP_CONNECT操作的目的是SP向ISMG注册作为一个合法SP身份，

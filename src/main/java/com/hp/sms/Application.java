@@ -4,10 +4,8 @@ import com.hp.sms.client.NettyClient;
 import com.hp.sms.domain.SharedInfo;
 import com.hp.sms.domain.SpInfo;
 import com.hp.sms.service.SimpleSMS;
-import com.hp.sms.util.MsgContainer;
 import com.hp.sms.utils.DataTool;
 import com.hp.sms.utils.SocketRedis;
-import io.netty.channel.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -15,9 +13,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.annotation.ComponentScan;
-
-import java.lang.System;
-import java.util.HashMap;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.hp.sms"} )

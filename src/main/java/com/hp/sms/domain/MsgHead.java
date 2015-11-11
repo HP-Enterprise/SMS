@@ -7,7 +7,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import org.apache.log4j.Logger;
-import com.hp.sms.util.MsgUtils;
 
 /**
  * 所有请求的消息头<br/>

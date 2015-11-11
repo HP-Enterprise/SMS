@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import org.apache.log4j.Logger;
 
-import  com.hp.sms.util.MsgUtils;
+import com.hp.sms.utils.MsgUtils;
 
 /**
  * 

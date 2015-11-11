@@ -1,4 +1,4 @@
-package com.hp.sms.util;
+package com.hp.sms.utils;
 
 import java.io.DataOutputStream;
 import java.io.IOException;

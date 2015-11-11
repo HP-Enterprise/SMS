@@ -19,7 +19,7 @@ import com.hp.sms.domain.MsgCommand;
 import com.hp.sms.domain.MsgHead;
 import com.hp.sms.domain.SharedInfo;
 import com.hp.sms.domain.SpInfo;
-import com.hp.sms.util.MsgUtils;
+import com.hp.sms.utils.MsgUtils;
 
 import com.hp.sms.utils.DataTool;
 import com.hp.sms.utils.SocketRedis;
@@ -73,7 +73,7 @@ public class HeartBeatReqHandler extends ChannelInboundHandlerAdapter {
 	} else if (message.getCommandId() == MsgCommand.CMPP_ACTIVE_TEST_RESP) {
 		_logger.info("Client receive server heart beat message : ---> "
 			  + message);
-		ctx.fireChannelRead(msg);
+		ctx.fireChannelRead(msg);//真实运行不需要抛出心跳resp msg，目前为了检测收消息，暂时开启
 	} else
 	    ctx.fireChannelRead(msg);
     }
@@ -97,7 +97,7 @@ public class HeartBeatReqHandler extends ChannelInboundHandlerAdapter {
 
 	private MsgHead buildHeatBeat() {
 		MsgHead head=new MsgHead();
-		head.setTotalLength(12);//消息总长度，级总字节数:4+4+4(消息头)+6+16+1+4(消息主体)
+		head.setTotalLength(12);//消息总长度，级总字节数:4+4+4(消息头)
 		head.setCommandId(MsgCommand.CMPP_ACTIVE_TEST);//标识创建连接
 		head.setSequenceId(MsgUtils.getSequence());//序列，由我们指定
 	    return head;

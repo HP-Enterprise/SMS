@@ -16,7 +16,7 @@
 package com.hp.sms.client;
 
 import com.hp.sms.domain.*;
-import com.hp.sms.util.MsgUtils;
+import com.hp.sms.utils.MsgUtils;
 
 import com.hp.sms.utils.DataTool;
 import com.hp.sms.utils.SocketRedis;
@@ -27,9 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Date;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
