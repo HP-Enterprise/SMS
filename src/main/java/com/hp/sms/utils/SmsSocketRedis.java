@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @Component
-public class SocketRedis {
+public class SmsSocketRedis {
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;

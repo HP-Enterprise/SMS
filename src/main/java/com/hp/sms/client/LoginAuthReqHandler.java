@@ -16,8 +16,8 @@
 package com.hp.sms.client;
 
 import com.hp.sms.utils.MsgUtils;
-import com.hp.sms.utils.DataTool;
-import com.hp.sms.utils.SocketRedis;
+import com.hp.sms.utils.SmsDataTool;
+import com.hp.sms.utils.SmsSocketRedis;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.*;
 import  com.hp.sms.domain.*;
@@ -32,15 +32,15 @@ import org.slf4j.LoggerFactory;
 public class LoginAuthReqHandler extends ChannelInboundHandlerAdapter {
 	private SpInfo spInfo;
 	private SharedInfo sharedInfo;
-	private SocketRedis socketRedis;
-	private DataTool dataTool;
+	private SmsSocketRedis smsSocketRedis;
+	private SmsDataTool smsDataTool;
 	private Logger _logger;
 
-	public LoginAuthReqHandler(SpInfo spInfo,SharedInfo sharedInfo,SocketRedis s,DataTool dt){
+	public LoginAuthReqHandler(SpInfo spInfo,SharedInfo sharedInfo, SmsSocketRedis s, SmsDataTool dt){
 		this.spInfo=spInfo;
 		this.sharedInfo=sharedInfo;
-		this.socketRedis=s;
-		this.dataTool=dt;
+		this.smsSocketRedis =s;
+		this.smsDataTool =dt;
 		this._logger = LoggerFactory.getLogger(LoginAuthReqHandler.class);
 	}
     /**
@@ -55,9 +55,9 @@ public class LoginAuthReqHandler extends ChannelInboundHandlerAdapter {
 		if(sharedInfo.isConnected()==false){
 			_logger.info(">>>>>>>>>>>>>>>>do Connect");
 			MsgHead h=buildLoginReq();
-			String byteStr=dataTool.bytes2hex(h.toByteArry());
+			String byteStr= smsDataTool.bytes2hex(h.toByteArry());
 			_logger.info(byteStr);
-			ctx.writeAndFlush(dataTool.getByteBuf(byteStr));
+			ctx.writeAndFlush(smsDataTool.getByteBuf(byteStr));
 		}else{
 			_logger.info(">>>>>>>>>>>>>>>>not need to do Connect");
 		}
@@ -75,8 +75,8 @@ public class LoginAuthReqHandler extends ChannelInboundHandlerAdapter {
 		    throws Exception {
 
 		ByteBuf m = (ByteBuf) msg;
-		byte[] receiveData=dataTool.getBytesFromByteBuf(m);
-		String receiveDataHexString=dataTool.bytes2hex(receiveData);
+		byte[] receiveData= smsDataTool.getBytesFromByteBuf(m);
+		String receiveDataHexString= smsDataTool.bytes2hex(receiveData);
 		_logger.info("Receive date from " + ctx.channel().remoteAddress() + ">>>:" + receiveDataHexString);
 		//
 		MsgHead message=new MsgHead(receiveData);

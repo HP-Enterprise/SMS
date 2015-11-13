@@ -24,7 +24,7 @@ public class SmsServiceTest {
    @Autowired
    @Qualifier("simpleSMS")
    SmsService simpleSMS;
-           ;
+
     @Before
     public void setUp() {
     }

@@ -4,8 +4,8 @@ import com.hp.sms.client.NettyClient;
 import com.hp.sms.domain.SharedInfo;
 import com.hp.sms.domain.SpInfo;
 import com.hp.sms.service.SimpleSMS;
-import com.hp.sms.utils.DataTool;
-import com.hp.sms.utils.SocketRedis;
+import com.hp.sms.utils.SmsDataTool;
+import com.hp.sms.utils.SmsSocketRedis;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -29,11 +29,11 @@ public class Application implements CommandLineRunner {
     @Value("${com.hp.cmpp.disabled}")
     private boolean _disabled;
     @Autowired
-    DataTool dataTool;
+    SmsDataTool smsDataTool;
     public static SharedInfo sharedInfo=new SharedInfo();
 
     @Autowired
-    SocketRedis socketRedis;
+    SmsSocketRedis smsSocketRedis;
 
     @Autowired
     SpInfo spInfo;
@@ -47,7 +47,7 @@ public class Application implements CommandLineRunner {
 
         if(!_disabled){
             logger.info("Client try connect to cmpp @" + _cmpp_ip + ":" + _cmpp_port);
-            new NettyClient(spInfo,sharedInfo,socketRedis,dataTool).connect(_cmpp_port, _cmpp_ip);
+            new NettyClient(spInfo,sharedInfo, smsSocketRedis, smsDataTool).connect(_cmpp_port, _cmpp_ip);
             logger.info("Client try connect to cmpp @" + _cmpp_ip + ":" + _cmpp_port);
         }
 

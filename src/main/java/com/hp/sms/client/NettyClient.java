@@ -6,8 +6,8 @@ package com.hp.sms.client;
 
 import com.hp.sms.domain.SharedInfo;
 import com.hp.sms.domain.SpInfo;
-import com.hp.sms.utils.DataTool;
-import com.hp.sms.utils.SocketRedis;
+import com.hp.sms.utils.SmsDataTool;
+import com.hp.sms.utils.SmsSocketRedis;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -17,7 +17,6 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
-import io.netty.handler.codec.string.StringDecoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,15 +31,15 @@ import java.util.concurrent.TimeUnit;
 public class NettyClient {
     private SpInfo spInfo;
     private SharedInfo sharedInfo;
-    private SocketRedis socketRedis;
-    private DataTool dataTool;
+    private SmsSocketRedis smsSocketRedis;
+    private SmsDataTool smsDataTool;
     private Logger _logger;
 
-    public NettyClient(SpInfo spInfo,SharedInfo sharedInfo,SocketRedis s,DataTool dt){
+    public NettyClient(SpInfo spInfo,SharedInfo sharedInfo, SmsSocketRedis s, SmsDataTool dt){
         this.spInfo=spInfo;
         this.sharedInfo=sharedInfo;
-        this.socketRedis=s;
-        this.dataTool=dt;
+        this.smsSocketRedis =s;
+        this.smsDataTool =dt;
         this._logger = LoggerFactory.getLogger(NettyClient.class);
     }
 
@@ -60,13 +59,13 @@ public class NettyClient {
                                 throws Exception {
                             ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(1024,0,4,-4,0));
                             ch.pipeline().addLast("LoginAuthHandler",
-                                    new LoginAuthReqHandler(spInfo,sharedInfo,socketRedis,dataTool));
+                                    new LoginAuthReqHandler(spInfo,sharedInfo, smsSocketRedis, smsDataTool));
                             ch.pipeline().addLast("HeartBeatHandler",
-                                    new HeartBeatReqHandler(spInfo,sharedInfo,socketRedis,dataTool));
+                                    new HeartBeatReqHandler(spInfo,sharedInfo, smsSocketRedis, smsDataTool));
                             ch.pipeline().addLast("OutputMessageHandler",
-                                    new OutputMessagerHandler(spInfo,sharedInfo,socketRedis,dataTool));
+                                    new OutputMessagerHandler(spInfo,sharedInfo, smsSocketRedis, smsDataTool));
                             ch.pipeline().addLast("InputMessageHandler",
-                                    new InputMessageHandler(spInfo,sharedInfo,socketRedis,dataTool));
+                                    new InputMessageHandler(spInfo,sharedInfo, smsSocketRedis, smsDataTool));
 
                         }
                     });

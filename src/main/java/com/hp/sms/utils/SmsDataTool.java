@@ -16,14 +16,14 @@ import static io.netty.buffer.Unpooled.buffer;
  * Created by luj on 2015/9/17.
  */
 @Component
-public class DataTool {
+public class SmsDataTool {
 
 
 
     public static final String smsout_preStr="smsoutput:";
     public static final String smsin_preStr="smsinput:";
 
-    private Logger _logger = LoggerFactory.getLogger(DataTool.class);
+    private Logger _logger = LoggerFactory.getLogger(SmsDataTool.class);
     public  boolean checkReg(byte[] bytes){
         //校验注册数据
         return true;

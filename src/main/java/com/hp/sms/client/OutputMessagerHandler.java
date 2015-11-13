@@ -18,8 +18,8 @@ package com.hp.sms.client;
 import com.hp.sms.domain.*;
 import com.hp.sms.utils.MsgUtils;
 
-import com.hp.sms.utils.DataTool;
-import com.hp.sms.utils.SocketRedis;
+import com.hp.sms.utils.SmsDataTool;
+import com.hp.sms.utils.SmsSocketRedis;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -40,15 +40,15 @@ public class OutputMessagerHandler extends ChannelInboundHandlerAdapter {
 	private volatile ScheduledFuture<?> outputMsg;
 	private SpInfo spInfo;
 	private SharedInfo sharedInfo;
-	private SocketRedis socketRedis;
-	private DataTool dataTool;
+	private SmsSocketRedis smsSocketRedis;
+	private SmsDataTool smsDataTool;
 	private Logger _logger;
 
-	public OutputMessagerHandler(SpInfo spInfo,SharedInfo sharedInfo,SocketRedis s,DataTool dt){
+	public OutputMessagerHandler(SpInfo spInfo,SharedInfo sharedInfo, SmsSocketRedis s, SmsDataTool dt){
 		this.spInfo=spInfo;
 		this.sharedInfo=sharedInfo;
-		this.socketRedis=s;
-		this.dataTool=dt;
+		this.smsSocketRedis =s;
+		this.smsDataTool =dt;
 		this._logger = LoggerFactory.getLogger(OutputMessagerHandler.class);
 	}
 
@@ -56,7 +56,7 @@ public class OutputMessagerHandler extends ChannelInboundHandlerAdapter {
 	public void channelRead(ChannelHandlerContext ctx, Object msg)
 			throws Exception {
 		ByteBuf m = (ByteBuf) msg;
-		byte[] receiveData=dataTool.getBytesFromByteBuf(m);
+		byte[] receiveData= smsDataTool.getBytesFromByteBuf(m);
 
 		MsgHead message=new MsgHead(receiveData);
 		// 握手成功，主动发送心跳消息
@@ -88,21 +88,21 @@ public class OutputMessagerHandler extends ChannelInboundHandlerAdapter {
 			String phone="";
 			String msgContent="";
 			//读取redis中所有的待发短信集合 采用key-set存储
-			Set<String> setKey = socketRedis.getKeysSet("smsoutput:*");
+			Set<String> setKey = smsSocketRedis.getKeysSet("smsoutput:*");
 			if(setKey.size()>0){   _logger.info( setKey.size()+" sms wait to be handle "); }
 			Iterator keys = setKey.iterator();
 			while (keys.hasNext()){
 				//遍历待发数据,处理
 				String k=(String)keys.next();
 				phone=k.replace("smsoutput:", "");//取出目标号码
-				msgContent= socketRedis.popSetOneString(k);
+				msgContent= smsSocketRedis.popSetOneString(k);
 			}
 			if(!phone.equals("")){
 			MsgHead outMsg = buildOutputMsg(phone,msgContent);
-			String byteStr=dataTool.bytes2hex(outMsg.toByteArry());
+			String byteStr= smsDataTool.bytes2hex(outMsg.toByteArry());
 			_logger.info("Client send submit message to server : ---> "
 			+ byteStr);
-			ctx.writeAndFlush(dataTool.getByteBuf(byteStr));
+			ctx.writeAndFlush(smsDataTool.getByteBuf(byteStr));
 			}
 		}
 

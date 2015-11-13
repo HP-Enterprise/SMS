@@ -21,8 +21,8 @@ import com.hp.sms.domain.SharedInfo;
 import com.hp.sms.domain.SpInfo;
 import com.hp.sms.utils.MsgUtils;
 
-import com.hp.sms.utils.DataTool;
-import com.hp.sms.utils.SocketRedis;
+import com.hp.sms.utils.SmsDataTool;
+import com.hp.sms.utils.SmsSocketRedis;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -40,15 +40,15 @@ public class HeartBeatReqHandler extends ChannelInboundHandlerAdapter {
     private volatile ScheduledFuture<?> heartBeat;
 	private SpInfo spInfo;
 	private SharedInfo sharedInfo;
-	private SocketRedis socketRedis;
-	private DataTool dataTool;
+	private SmsSocketRedis smsSocketRedis;
+	private SmsDataTool smsDataTool;
 	private Logger _logger;
 
-	public HeartBeatReqHandler(SpInfo spInfo,SharedInfo sharedInfo,SocketRedis s,DataTool dt){
+	public HeartBeatReqHandler(SpInfo spInfo,SharedInfo sharedInfo, SmsSocketRedis s, SmsDataTool dt){
 		this.spInfo=spInfo;
 		this.sharedInfo=sharedInfo;
-		this.socketRedis=s;
-		this.dataTool=dt;
+		this.smsSocketRedis =s;
+		this.smsDataTool =dt;
 		this._logger = LoggerFactory.getLogger(HeartBeatReqHandler.class);
 	}
 
@@ -56,7 +56,7 @@ public class HeartBeatReqHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg)
 	    throws Exception {
 		ByteBuf m = (ByteBuf) msg;
-		byte[] receiveData=dataTool.getBytesFromByteBuf(m);
+		byte[] receiveData= smsDataTool.getBytesFromByteBuf(m);
 
 		MsgHead message=new MsgHead(receiveData);
 	// 握手成功，主动发送心跳消息
@@ -89,10 +89,10 @@ public class HeartBeatReqHandler extends ChannelInboundHandlerAdapter {
 	public void run() {
 		MsgHead heatBeat = buildHeatBeat();
 
-		String byteStr=dataTool.bytes2hex(heatBeat.toByteArry());
+		String byteStr= smsDataTool.bytes2hex(heatBeat.toByteArry());
 		_logger.info("Client send heart beat message to server : ---> "
 				+ byteStr);
-		ctx.writeAndFlush(dataTool.getByteBuf(byteStr));
+		ctx.writeAndFlush(smsDataTool.getByteBuf(byteStr));
 	 	}
 
 	private MsgHead buildHeatBeat() {
