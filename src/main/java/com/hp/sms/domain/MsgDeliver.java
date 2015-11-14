@@ -3,7 +3,9 @@ package com.hp.sms.domain;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
+import com.hp.sms.utils.SmsDataTool;
 import org.apache.log4j.Logger;
 
 /**
@@ -21,7 +23,7 @@ public class MsgDeliver extends MsgHead {
 	private byte src_terminal_type = 0;//源终端号码类型，0：真实号码；1：伪码
 	private byte registered_Delivery = 0;//是否为状态报告 0：非状态报告1：状态报告
 	private byte msg_Length;//消息长度
-	private String msg_Content;//消息长度
+	private String msg_Content;//消息
 	private String linkID;
 	
 	private long msg_Id_report;
@@ -31,9 +33,11 @@ public class MsgDeliver extends MsgHead {
 	private String dest_terminal_Id;
 	private int sMSC_sequence;
 	private int result;//解析结果
+	private SmsDataTool smsDataTool;
 	public MsgDeliver(byte[] data){
+		smsDataTool=new SmsDataTool();
 		if(data.length>8+8+21+10+1+1+1+32+1+1+1+20){//+Msg_length+
-			String fmtStr="gb2312";
+			String fmtStr="GBK";
 			ByteArrayInputStream bins=new ByteArrayInputStream(data);
 			DataInputStream dins=new DataInputStream(bins);
 			try {
@@ -50,7 +54,7 @@ public class MsgDeliver extends MsgHead {
 				this.tP_pid = dins.readByte();
 				this.tP_udhi = dins.readByte();
 				this.msg_Fmt = dins.readByte();
-				fmtStr=this.msg_Fmt==8?"utf-8":"gb2312";
+				fmtStr=this.msg_Fmt==8?"utf-8":"gbk";
 				byte[] src_terminal_IdByte=new byte[32];
 				dins.read(src_terminal_IdByte);
 				this.src_terminal_Id=new String(src_terminal_IdByte);//源终端MSISDN号码
@@ -60,7 +64,8 @@ public class MsgDeliver extends MsgHead {
 				byte[] msg_ContentByte=new byte[msg_Length];
 				dins.read(msg_ContentByte);
 				if(registered_Delivery==1){
-					this.msg_Content=new String(msg_ContentByte,fmtStr);//消息长度
+					//this.msg_Content=new String(msg_ContentByte,fmtStr);//消息长度
+					this.msg_Content=getContentFromBytes(msg_ContentByte,msg_Fmt);//消息长度
 					if(msg_Length==8+7+10+10+21+4){
 						ByteArrayInputStream binsC=new ByteArrayInputStream(data);
 						DataInputStream dinsC=new DataInputStream(binsC);
@@ -85,7 +90,7 @@ public class MsgDeliver extends MsgHead {
 						this.result=1;//消息结构错
 					}
 				}else{
-					this.msg_Content=new String(msg_ContentByte,fmtStr);//消息长度
+					this.msg_Content=new String(msg_ContentByte,msg_Fmt);//消息长度
 				}
 				byte[] linkIDByte=new byte[20];
 				this.linkID=new String(linkIDByte);
@@ -99,6 +104,22 @@ public class MsgDeliver extends MsgHead {
 			this.result=1;//消息结构错
 			logger.info("短信网关CMPP_DELIVER,解析数据包出错，包长度不一致。长度为:"+data.length);
 		}
+	}
+
+
+
+	public String getContentFromBytes(byte[] msg_ContentByte,Byte msg_Fmt){
+		//如果是文本,形成字符串 如果是二进制，生成hex
+		String re="";
+		if(msg_Fmt==(byte)0x08 ){
+			re=smsDataTool.bytes2hex(msg_ContentByte);
+		}else{
+			try{
+				re=new String(msg_ContentByte,"ISO-10646-UCS-2");
+			}catch (UnsupportedEncodingException e){e.printStackTrace();
+				re=smsDataTool.bytes2hex(msg_ContentByte);}
+		}
+		return re;
 	}
 	public long getMsg_Id() {
 		return msg_Id;

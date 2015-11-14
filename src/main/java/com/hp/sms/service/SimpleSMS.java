@@ -20,12 +20,7 @@ public class SimpleSMS implements SmsService{
 
     @Value("${com.hp.sms.ip}")
     private String _smsIP;
-
     private Logger _logger=LoggerFactory.getLogger(SimpleSMS.class);
-
-    private static int RESULT_SUCCESS=1;
-    private static int RESULT_FAILURE=0;
-
 
     @Override
     public int sendSms(String sim, String content){
@@ -95,4 +90,9 @@ public class SimpleSMS implements SmsService{
         return RESULT_FAILURE;//success返回1 faild返回0
     }
 
+    @Override
+    public int sendBinSms(String sim, byte[] content){
+        _logger.info("not support");
+        return RESULT_FAILURE;
+    }
 }

@@ -141,7 +141,7 @@ public class MsgUtils {
 	public static String EncodeUCS2(String src) {   
 	    byte[] bytes;   
 	    try {   
-	        bytes = src.getBytes("UTF-16BE");   
+	        bytes = src.getBytes("ISO-10646-UCS-2");   //UTF-16BE
 	    } catch (UnsupportedEncodingException e) {   
 	    	bytes=new byte[0]; 
 	    }   

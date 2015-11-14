@@ -108,21 +108,19 @@ public class OutputMessagerHandler extends ChannelInboundHandlerAdapter {
 			ctx.writeAndFlush(smsDataTool.getByteBuf(byteStr));
 			}
 		}
-
 		private MsgHead buildTxtOutputMsg(String msgType,String phone,String msgContent) {
 			//这部分的代码需要真实环境实测配置
 			_logger.info(phone+">>>>>send msg:"+msgContent);
 			String cusMsisdn=phone;
 			MsgSubmit submit=new MsgSubmit();
-			submit.setTotalLength(12 + 8 + 1 + 1 + 1 + 1 + 10 + 1 + 32 + 1 + 1 + 1 + 1 + 6 + 2 + 6 + 17 + 17 + 21 + 1 + 32 + 1 + 1 + msgContent.length() * 2 + 20);
 			submit.setCommandId(MsgCommand.CMPP_SUBMIT);
 			submit.setSequenceId(MsgUtils.getSequence());
-			//submit.setMsgId(1l);/////////////////////////////
+
 			submit.setPkTotal((byte) 0x01);
 			submit.setPkNumber((byte) 0x01);
 			submit.setRegisteredDelivery((byte) 0x00);
 			submit.setMsgLevel((byte) 0x01);
-			//submit.setServiceId("");//////////////////////
+
 			submit.setFeeUserType((byte) 0x00);
 			submit.setFeeTerminalId("1234567890");
 			submit.setFeeTerminalType((byte) 0x00);
@@ -131,40 +129,23 @@ public class OutputMessagerHandler extends ChannelInboundHandlerAdapter {
 			if(msgType .equals("txt")){
 				submit.setMsgFmt((byte) 0x08);//UCS2
 				try{
-					byte[] aaa=msgContent.getBytes("UTF-16BE");
-					_logger.info(">>>>>>>>>>String"+msgContent.length());
-					_logger.info(">>>>>>>>>>aaa"+aaa.length);
+					byte[] aaa=msgContent.getBytes("ISO-10646-UCS-2");
 					submit.setMsgContent(aaa);
 				}catch (UnsupportedEncodingException e){
 					e.printStackTrace();
 				}
 			}else{
-				try{
 				submit.setMsgFmt((byte) 0x04);//二进制
-				//byte[] bbb = smsDataTool.getBytesFromByteBuf(smsDataTool.getByteBuf(msgContent));
-				//_logger.info(">>>>>>>>>>bbb"+bbb.length);
-				byte[] bbb=msgContent.getBytes("UTF-8");
+				byte[] bbb = smsDataTool.getBytesFromByteBuf(smsDataTool.getByteBuf(msgContent));
 				submit.setMsgContent(bbb);//二进制存储的是16进制hex字符串。转换层字节数组
-				}catch (UnsupportedEncodingException e){
-					e.printStackTrace();
-				}
 			}
 			submit.setMsgSrc(spInfo.getSpId());
-			/*submit.setFeeType("03");/////////////////////////////////
-			submit.setFeeCode("123456");/////////////////////////////
-			submit.setValIdTime("1511101449311010");////////////////////////////////
-			submit.setAtTime("1511101459311010");//////////////////////////////////*/
 			submit.setSrcId(spInfo.getSpCode());
 			submit.setDestUsrTl((byte) 1);
 			submit.setDestTerminalId(cusMsisdn);
 			submit.setDestTerminalType((byte) 0);
-			//if(msgType .equals("txt")){
-			submit.setMsgLength((byte) (msgContent.length()));
-			//}else{
-			//	submit.setMsgLength((byte)submit.getMsgContent() .length);
-			//}
-
-
+			submit.setMsgLength((byte) submit.getMsgContent().length);
+			submit.setTotalLength(12 + 8 + 1 + 1 + 1 + 1 + 10 + 1 + 32 + 1 + 1 + 1 + 1 + 6 + 2 + 6 + 17 + 17 + 21 + 1 + 32 + 1 + 1 + submit.getMsgContent() .length  + 20);
 			submit.setLinkID("");
 			return submit;
 		}
