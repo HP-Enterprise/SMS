@@ -23,3 +23,18 @@ gradle -Dspring.profiles.active=product run
 ```SHELL
 gradle run
 ```
+
+## 调用 短信猫和CMPP分别如下
+```SHELL
+    @Autowired
+    @Qualifier("cmppSender")
+    SmsService cmppSms;
+    cmppSms.sendSms("13000001111","中国");//普通短信
+    cmppSms.sendBinSms("13000001111", "123456".getBytes());//二进制短信
+
+    @Autowired
+    @Qualifier("simpleSMS")
+    SmsService simpleSMS;
+    simpleSMS.sendSms("18071045790","haha");//短信猫目前仅支持文本
+
+```
