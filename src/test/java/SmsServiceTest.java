@@ -1,12 +1,9 @@
 import com.hp.sms.Application;
 import com.hp.sms.service.SmsService;
 import com.hp.sms.utils.MsgUtils;
+import org.junit.*;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -40,14 +37,15 @@ public class SmsServiceTest {
     @Test
     public void test_txt_cmpp(){
      System.out.println(">>>>>>>>>>>>>>>>>>>>>>>");
-     cmppSms.sendSms("13000001111","中国");
+     cmppSms.sendSms("13000001111", "中国");
     }
     @Test
     public void test_bin_cmpp() {
         System.out.println(">>>>>>>>>>>>>>>>>>>>>>>");
         cmppSms.sendBinSms("13000001111", "123456".getBytes());
     }
-   @Test
+    @Ignore("Not suitable for travis-ci")
+    @Test
    public void test_txt_cat(){
    System.out.println(">>>>>>>>>>>>>>>>>>>>>>>");
     simpleSMS.sendSms("18071045790","haha");

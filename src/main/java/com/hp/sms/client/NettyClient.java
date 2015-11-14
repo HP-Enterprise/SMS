@@ -18,6 +18,7 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.timeout.ReadTimeoutHandler;
+import io.netty.handler.traffic.GlobalTrafficShapingHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,6 +71,8 @@ public class NettyClient {
                                     new OutputMessagerHandler(spInfo,sharedInfo, smsSocketRedis, smsDataTool));
                             ch.pipeline().addLast("InputMessageHandler",
                                     new InputMessageHandler(spInfo,sharedInfo, smsSocketRedis, smsDataTool));
+                         /*   ch.pipeline().addLast("TrafficHandler",
+                                    new GlobalTrafficShapingHandler(0,0,0));*/
 
                         }
                     });
