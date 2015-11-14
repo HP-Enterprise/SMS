@@ -17,6 +17,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
+import io.netty.handler.timeout.ReadTimeoutHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,6 +50,7 @@ public class NettyClient {
 
     public void connect(int port, String host) throws Exception {
         // 配置客户端NIO线程组
+        _logger.info("try connect to server @"+host+":"+port);
         try {
             Bootstrap b = new Bootstrap();
             b.group(group).channel(NioSocketChannel.class)
@@ -58,6 +60,8 @@ public class NettyClient {
                         public void initChannel(SocketChannel ch)
                                 throws Exception {
                             ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(1024,0,4,-4,0));
+                            ch.pipeline().addLast("readTimeoutHandler",
+                                    new ReadTimeoutHandler(30));
                             ch.pipeline().addLast("LoginAuthHandler",
                                     new LoginAuthReqHandler(spInfo,sharedInfo, smsSocketRedis, smsDataTool));
                             ch.pipeline().addLast("HeartBeatHandler",
@@ -74,6 +78,7 @@ public class NettyClient {
                     new InetSocketAddress(host, port)).sync();
             future.channel().closeFuture().sync();
         } finally {
+            sharedInfo.setConnected(false);//标识重新连接后需要做login
             // 所有资源释放完成之后，清空资源，再次发起重连操作
             executor.execute(new Runnable() {
                 @Override
