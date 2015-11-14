@@ -61,7 +61,7 @@ public class NettyClient {
                                 throws Exception {
                             ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(1024,0,4,-4,0));
                             ch.pipeline().addLast("readTimeoutHandler",
-                                    new ReadTimeoutHandler(30));
+                                    new ReadTimeoutHandler(30));//TimeOut=N*T
                             ch.pipeline().addLast("LoginAuthHandler",
                                     new LoginAuthReqHandler(spInfo,sharedInfo, smsSocketRedis, smsDataTool));
                             ch.pipeline().addLast("HeartBeatHandler",

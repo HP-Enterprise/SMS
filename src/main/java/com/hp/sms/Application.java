@@ -20,10 +20,10 @@ public class Application implements CommandLineRunner {
     @Autowired
     private SimpleSMS _sms;
 
-    @Value("${com.hp.cmpp.ip}")
+    @Value("${com.hp.cmpp.ismgIp}")
     private String _cmpp_ip;
 
-    @Value("${com.hp.cmpp.port}")
+    @Value("${com.hp.cmpp.ismgPort}")
     private int _cmpp_port;
 
     @Value("${com.hp.cmpp.disabled}")

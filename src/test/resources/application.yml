@@ -1,8 +1,7 @@
 # SMS Gateway
 com.hp.sms.ip: 127.0.0.1
 # CMPP Gateway
-com.hp.cmpp.ip: 127.0.0.1
-com.hp.cmpp.port: 7890
+#是否禁用短信网关
 com.hp.cmpp.disabled: true
 #短信网关IP
 com.hp.cmpp.ismgIp: 127.0.0.1
