@@ -8,22 +8,25 @@ import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 /**
  * 短信接口辅助工具类
  */
 public class MsgUtils {
-	private static int sequenceId=0;//序列编号
+	private static final AtomicInteger sequenceId = new AtomicInteger((int) (System.currentTimeMillis() % 10000000 *
+			100));
 	/**
 	 * 序列 自增
 	 */
-	public static int getSequence(){
-		++sequenceId;
-		if(sequenceId>255){
-			sequenceId=0;
+	public synchronized static int getSequence() {
+		if (sequenceId.get() == Integer.MAX_VALUE) {
+			sequenceId.set(1);
+		}else {
+			sequenceId.incrementAndGet();
 		}
-		return sequenceId;
+		return sequenceId.get();
 	}
 	/**
 	 * 时间戳的明文,由客户端产生,格式为MMDDHHMMSS，即月日时分秒，10位数字的整型，右对齐 。

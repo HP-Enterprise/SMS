@@ -85,6 +85,7 @@ public class OutputMessagerHandler extends ChannelInboundHandlerAdapter {
 
 		@Override
 		public void run() {
+			String msgType="";
 			String phone="";
 			String msgContent="";
 			//读取redis中所有的待发短信集合 采用key-set存储
@@ -94,19 +95,21 @@ public class OutputMessagerHandler extends ChannelInboundHandlerAdapter {
 			while (keys.hasNext()){
 				//遍历待发数据,处理
 				String k=(String)keys.next();
-				phone=k.replace("smsoutput:", "");//取出目标号码
+				String[] datas=k.split(":");
+				msgType=datas[1];
+				phone=datas[2];//取出目标号码
 				msgContent= smsSocketRedis.popSetOneString(k);
 			}
 			if(!phone.equals("")){
-			MsgHead outMsg = buildOutputMsg(phone,msgContent);
+			MsgHead outMsg = buildTxtOutputMsg(msgType,phone, msgContent);
 			String byteStr= smsDataTool.bytes2hex(outMsg.toByteArry());
 			_logger.info("Client send submit message to server : ---> "
-			+ byteStr);
+					+ byteStr);
 			ctx.writeAndFlush(smsDataTool.getByteBuf(byteStr));
 			}
 		}
 
-		private MsgHead buildOutputMsg(String phone,String msgContent) {
+		private MsgHead buildTxtOutputMsg(String msgType,String phone,String msgContent) {
 			//这部分的代码需要真实环境实测配置
 			_logger.info(phone+">>>>>send msg:"+msgContent);
 			String cusMsisdn=phone;
@@ -125,7 +128,27 @@ public class OutputMessagerHandler extends ChannelInboundHandlerAdapter {
 			submit.setFeeTerminalType((byte) 0x00);
 			submit.setTpPId((byte) 0x00);
 			submit.setTpUdhi((byte) 0x00);
-			submit.setMsgFmt((byte) 0x0f);
+			if(msgType .equals("txt")){
+				submit.setMsgFmt((byte) 0x08);//UCS2
+				try{
+					byte[] aaa=msgContent.getBytes("UTF-16BE");
+					_logger.info(">>>>>>>>>>String"+msgContent.length());
+					_logger.info(">>>>>>>>>>aaa"+aaa.length);
+					submit.setMsgContent(aaa);
+				}catch (UnsupportedEncodingException e){
+					e.printStackTrace();
+				}
+			}else{
+				try{
+				submit.setMsgFmt((byte) 0x04);//二进制
+				//byte[] bbb = smsDataTool.getBytesFromByteBuf(smsDataTool.getByteBuf(msgContent));
+				//_logger.info(">>>>>>>>>>bbb"+bbb.length);
+				byte[] bbb=msgContent.getBytes("UTF-8");
+				submit.setMsgContent(bbb);//二进制存储的是16进制hex字符串。转换层字节数组
+				}catch (UnsupportedEncodingException e){
+					e.printStackTrace();
+				}
+			}
 			submit.setMsgSrc(spInfo.getSpId());
 			/*submit.setFeeType("03");/////////////////////////////////
 			submit.setFeeCode("123456");/////////////////////////////
@@ -135,12 +158,13 @@ public class OutputMessagerHandler extends ChannelInboundHandlerAdapter {
 			submit.setDestUsrTl((byte) 1);
 			submit.setDestTerminalId(cusMsisdn);
 			submit.setDestTerminalType((byte) 0);
+			//if(msgType .equals("txt")){
 			submit.setMsgLength((byte) (msgContent.length()));
-			try{
-				submit.setMsgContent(msgContent.getBytes("UnicodeBigUnmarked"));
-			}catch (UnsupportedEncodingException e){
-				e.printStackTrace();
-			}
+			//}else{
+			//	submit.setMsgLength((byte)submit.getMsgContent() .length);
+			//}
+
+
 			submit.setLinkID("");
 			return submit;
 		}

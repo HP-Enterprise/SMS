@@ -21,6 +21,8 @@ public class SmsDataTool {
 
 
     public static final String smsout_preStr="smsoutput:";
+    public static final String smsout_txt_preStr="txt:";
+    public static final String smsout_bin_preStr="bin:";
     public static final String smsin_preStr="smsinput:";
 
     private Logger _logger = LoggerFactory.getLogger(SmsDataTool.class);

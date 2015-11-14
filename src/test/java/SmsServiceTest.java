@@ -1,5 +1,6 @@
 import com.hp.sms.Application;
 import com.hp.sms.service.SmsService;
+import com.hp.sms.utils.MsgUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.junit.After;
@@ -43,5 +44,14 @@ public class SmsServiceTest {
    System.out.println(">>>>>>>>>>>>>>>>>>>>>>>");
     simpleSMS.sendSms("18071045790","haha");
    }
+
+    @Test
+    public void test_encode(){
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>");
+        System.out.println(MsgUtils.EncodeUCS2("中国ABCDEF123456"));
+        String bytes="4E 2D 56 FD 00 41 00 42 00 43 00 44 00 45 00 46 00 31 00 32 00 33 00 34 00 35 00 36";
+        System.out.println(MsgUtils.DecodeUCS2(bytes.replace(" ",""))+"|");
+
+    }
 
 }
