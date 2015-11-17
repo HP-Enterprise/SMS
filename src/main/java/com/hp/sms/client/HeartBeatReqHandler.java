@@ -59,7 +59,7 @@ public class HeartBeatReqHandler extends ChannelInboundHandlerAdapter {
 		byte[] receiveData= smsDataTool.getBytesFromByteBuf(m);
 
 		MsgHead message=new MsgHead(receiveData);
-	// 握手成功，主动发送心跳消息
+	// 握手成功，启动心跳发送任务
 	if (message.getCommandId() == MsgCommand.CMPP_CONNECT_RESP) {
 		if(sharedInfo.isConnected()==true){
 	    	heartBeat = ctx.executor().scheduleAtFixedRate(
@@ -73,7 +73,7 @@ public class HeartBeatReqHandler extends ChannelInboundHandlerAdapter {
 	} else if (message.getCommandId() == MsgCommand.CMPP_ACTIVE_TEST_RESP) {
 		_logger.info("Client receive server heart beat message : ---> "
 			  + message);
-		ctx.fireChannelRead(msg);//真实运行不需要抛出心跳resp msg，目前为了检测收消息，暂时开启
+		ctx.fireChannelRead(msg);//真实运行不需要抛出心跳resp msg，目前为了便于检测收消息，暂时开启
 	} else
 	    ctx.fireChannelRead(msg);
     }

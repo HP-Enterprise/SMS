@@ -43,6 +43,7 @@ public class OutputMessagerHandler extends ChannelInboundHandlerAdapter {
 	private SmsSocketRedis smsSocketRedis;
 	private SmsDataTool smsDataTool;
 	private Logger _logger;
+	private int writeCount;
 
 	public OutputMessagerHandler(SpInfo spInfo,SharedInfo sharedInfo, SmsSocketRedis s, SmsDataTool dt){
 		this.spInfo=spInfo;
@@ -50,6 +51,7 @@ public class OutputMessagerHandler extends ChannelInboundHandlerAdapter {
 		this.smsSocketRedis =s;
 		this.smsDataTool =dt;
 		this._logger = LoggerFactory.getLogger(OutputMessagerHandler.class);
+		writeCount=0;
 	}
 
 	@Override
@@ -59,7 +61,7 @@ public class OutputMessagerHandler extends ChannelInboundHandlerAdapter {
 		byte[] receiveData= smsDataTool.getBytesFromByteBuf(m);
 
 		MsgHead message=new MsgHead(receiveData);
-		// 握手成功，主动发送心跳消息
+		// 握手成功，启动消息发送任务
 		if (message.getCommandId() == MsgCommand.CMPP_CONNECT_RESP) {
 			if(sharedInfo.isConnected()==true){
 				outputMsg = ctx.executor().scheduleAtFixedRate(
@@ -72,10 +74,18 @@ public class OutputMessagerHandler extends ChannelInboundHandlerAdapter {
 		}else if (message.getCommandId() == MsgCommand.CMPP_SUBMIT_RESP) {
 			_logger.info("Client receive server submit resp message : ---> "
 					+ message);
+			reduceWriteCount();
 		}else
 			ctx.fireChannelRead(msg);
 	}
-
+	public synchronized void reduceWriteCount(){
+		writeCount--;
+		_logger.info(">>>>>>>>>>...writeCount="+writeCount);
+	}
+	public synchronized void increaseWriteCount(){
+		writeCount++;
+		_logger.info(">>>>>>>>>>...writeCount=" + writeCount);
+	}
 	private class OutputMsgTask implements Runnable {
 		private final ChannelHandlerContext ctx;
 
@@ -84,7 +94,11 @@ public class OutputMessagerHandler extends ChannelInboundHandlerAdapter {
 		}
 
 		@Override
-		public void run() {
+		public  void run() {
+			if(writeCount>16){//参考CMPP3.0
+				_logger.info("send msg too quick...");
+				return;
+			}
 			String msgType="";
 			String phone="";
 			String msgContent="";
@@ -101,11 +115,12 @@ public class OutputMessagerHandler extends ChannelInboundHandlerAdapter {
 				msgContent= smsSocketRedis.popSetOneString(k);
 			}
 			if(!phone.equals("")){
-			MsgHead outMsg = buildTxtOutputMsg(msgType,phone, msgContent);
-			String byteStr= smsDataTool.bytes2hex(outMsg.toByteArry());
-			_logger.info("Client send submit message to server : ---> "
-					+ byteStr);
-			ctx.writeAndFlush(smsDataTool.getByteBuf(byteStr));
+				MsgHead outMsg = buildTxtOutputMsg(msgType,phone, msgContent);
+				String byteStr= smsDataTool.bytes2hex(outMsg.toByteArry());
+				_logger.info("Client send submit message to server : ---> "
+						+ byteStr);
+				ctx.writeAndFlush(smsDataTool.getByteBuf(byteStr));
+				increaseWriteCount();
 			}
 		}
 		private MsgHead buildTxtOutputMsg(String msgType,String phone,String msgContent) {
