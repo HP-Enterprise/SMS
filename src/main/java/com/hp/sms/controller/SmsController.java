@@ -1,10 +1,14 @@
 package com.hp.sms.controller;
+
+import com.hp.sms.domain.Sms;
 import com.hp.sms.service.SmsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.RequestContext;
 
 import javax.servlet.http.HttpServletRequest;
+
 /**
  * Created by luj on 2015/11/10.
  */
@@ -17,11 +21,23 @@ public class SmsController {
     @Qualifier("cmppSender")
     SmsService cmppSms;
 
-    @RequestMapping(value="api/sms/{phone}/msg/{message}",method = RequestMethod.GET)//暂时GET方法便于测试
-    public String send(@PathVariable("phone") String phone,
-                    @PathVariable("message") String message, String token,HttpServletRequest request){
-        cmppSms.sendSms(phone,message);
-        return "send SMS success!";
+    /**
+     * * HTTP POST /api/sms/message<br>
+     * post方式发送短信消息
+     * @param sms Sms短信信息
+     * @param request 请求对象
+     * @return  如果成功返回成功信息，如果失败返回失败信息
+     */
+    @RequestMapping(value="/api/sms/message",method = RequestMethod.POST)
+    public String sendSms(@RequestBody Sms sms , HttpServletRequest request) {
+        RequestContext requestContext = new RequestContext(request);
+        if (sms == null){
+            return "error: null";
+        }else {
+//            System.out.println(sms.getPhone()+"|"+sms.getMessage());
+            cmppSms.sendSms(sms.getPhone(), sms.getMessage());
+            return "send SMS success!";
+        }
     }
 
 }
