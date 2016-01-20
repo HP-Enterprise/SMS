@@ -33,6 +33,7 @@ public class SimpleSMS {
 
     public int Send(String sim, String content){
         String ADD_URL="http://"+ _smsIP +"/message/messageSend";
+        OutputStreamWriter out = null;
         try {
             //建立连接
             URL url = new URL(ADD_URL);
@@ -46,7 +47,7 @@ public class SimpleSMS {
             connection.setRequestProperty("Content-Type", "application/json;charset=utf-8");
             connection.connect();
             //POST请求
-            OutputStreamWriter  out = new  OutputStreamWriter(connection.getOutputStream(), "UTF-8");
+            out = new  OutputStreamWriter(connection.getOutputStream(), "UTF-8");
 
             HashMap<String,String> m=new HashMap<String,String>();
             m.put("sim", sim);
@@ -79,10 +80,10 @@ public class SimpleSMS {
                 Map<String,String> resultMap = gs.fromJson(sb.toString(), new TypeToken<Map<String, String>>(){}.getType());
                 String status=resultMap.get("status");
                 this._logger.info("status:"+status);
-               if (status!=null) {
-                   if (status.equals("success"))
-                   return RESULT_SUCCESS;
-               }
+                if (status!=null) {
+                    if (status.equals("success"))
+                        return RESULT_SUCCESS;
+                }
             }
         } catch (MalformedURLException e) {
             // TODO Auto-generated catch block
@@ -93,6 +94,14 @@ public class SimpleSMS {
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+        } finally {
+            if(out!=null){
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return RESULT_FAILURE;//success返回1 faild返回0
     }
