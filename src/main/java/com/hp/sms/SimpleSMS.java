@@ -16,7 +16,7 @@ import com.google.gson.reflect.TypeToken;
  * 简单短信网关
  */
 @Service
-public class SimpleSMS {
+public class SimpleSMS implements ISms{
 
     @Value("${com.hp.sms.ip}")
     private String _smsIP;
