@@ -2,6 +2,7 @@ package com.hp.sms;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -16,6 +17,7 @@ import com.google.gson.reflect.TypeToken;
  * 简单短信网关
  */
 @Service
+@Component
 public class SimpleSMS implements ISms{
 
     @Value("${com.hp.sms.ip}")
