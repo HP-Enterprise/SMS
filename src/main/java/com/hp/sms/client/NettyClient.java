@@ -91,10 +91,11 @@ public class NettyClient {
                         try {
                             connect(port,host);// 发起重连操作
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            //e.printStackTrace();
+                            System.err.println(e.getMessage());
                         }
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        System.err.println(e.getMessage());
                     }
                 }
             });
