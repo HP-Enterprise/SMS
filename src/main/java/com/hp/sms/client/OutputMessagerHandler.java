@@ -144,7 +144,8 @@ public class OutputMessagerHandler extends ChannelInboundHandlerAdapter {
 			if(msgType .equals("txt")){
 				submit.setMsgFmt((byte) 0x08);//UCS2
 				try{
-					byte[] aaa=msgContent.getBytes("ISO-10646-UCS-2");
+					//byte[] aaa=msgContent.getBytes("ISO-10646-UCS-2");
+					byte[] aaa=msgContent.getBytes("UTF-8");
 					submit.setMsgContent(aaa);
 				}catch (UnsupportedEncodingException e){
 					e.printStackTrace();
