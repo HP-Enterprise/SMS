@@ -19,7 +19,7 @@ public class MsgSubmit extends MsgHead {
 	private byte pkNumber = 0x01;
 	private byte registeredDelivery = 0x00;
 	private byte msgLevel = 0x01;
-	private String serviceId = "";
+	private String serviceId;
 	private byte feeUserType = 0x00;// 谁接收，计谁的费
 	private String feeTerminalId = "";
 	private byte feeTerminalType = 0x00;

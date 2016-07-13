@@ -7,6 +7,8 @@ com.hp.cmpp.disabled: false
 com.hp.cmpp.ismgIp: 127.0.0.1
 #访问短信网关需要的密码
 com.hp.cmpp.sharedSecret: 123456
+#业务代码
+com.hp.cmpp.serviceId: 123456
 #由短信网关分配的SPID
 com.hp.cmpp.spId: 987654
 #短信网关端口，根据使用的CMPP协议不同而不同，如cmpp3.0长链接的端口为7890

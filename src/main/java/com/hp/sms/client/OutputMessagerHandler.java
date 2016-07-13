@@ -130,7 +130,7 @@ public class OutputMessagerHandler extends ChannelInboundHandlerAdapter {
 			MsgSubmit submit=new MsgSubmit();
 			submit.setCommandId(MsgCommand.CMPP_SUBMIT);
 			submit.setSequenceId(MsgUtils.getSequence());
-
+			submit.setServiceId(spInfo.getServiceId());
 			submit.setPkTotal((byte) 0x01);
 			submit.setPkNumber((byte) 0x01);
 			submit.setRegisteredDelivery((byte) 0x00);

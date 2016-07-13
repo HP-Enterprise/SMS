@@ -23,6 +23,9 @@ public class SpInfo {
        //由短信网关分配的SPCODE,即用户接受到的短信显示的主叫号码
     @Value("${com.hp.cmpp.spCode}")
     private String spCode;
+
+    @Value("${com.hp.cmpp.serviceId}")
+    private String serviceId;
     //SOCKET超时链接时间，可根据需求自由修改，建议6000，单位为毫秒
     @Value("${com.hp.cmpp.timeOut}")
     private int timeOut;
@@ -84,5 +87,13 @@ public class SpInfo {
 
     public void setConnectCount(int connectCount) {
         this.connectCount = connectCount;
+    }
+
+    public String getServiceId() {
+        return serviceId;
+    }
+
+    public void setServiceId(String serviceId) {
+        this.serviceId = serviceId;
     }
 }
