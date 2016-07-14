@@ -115,7 +115,7 @@ public class MsgDeliver extends MsgHead {
 			re=smsDataTool.bytes2hex(msg_ContentByte);
 		}else{
 			try{
-				re=new String(msg_ContentByte,"UTF-8");
+				re=new String(msg_ContentByte,"ISO-10646-UCS-2");
 			}catch (UnsupportedEncodingException e){e.printStackTrace();
 				re=smsDataTool.bytes2hex(msg_ContentByte);}
 		}
