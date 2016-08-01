@@ -1,12 +1,15 @@
 # SMS Gateway
 com.hp.sms.ip: 127.0.0.1
+
 # CMPP Gateway
 #是否禁用短信网关
-com.hp.cmpp.disabled: true
+com.hp.cmpp.disabled: false
 #短信网关IP
 com.hp.cmpp.ismgIp: 127.0.0.1
 #访问短信网关需要的密码
 com.hp.cmpp.sharedSecret: 123456
+#业务代码
+com.hp.cmpp.serviceId: 123456
 #由短信网关分配的SPID
 com.hp.cmpp.spId: 987654
 #短信网关端口，根据使用的CMPP协议不同而不同，如cmpp3.0长链接的端口为7890
@@ -17,6 +20,7 @@ com.hp.cmpp.spCode: 106123456
 com.hp.cmpp.timeOut: 6000
 #SOCKET链接失败重试次数，及短信发送失败重新发送的次数
 com.hp.cmpp.connectCount: 3
+
 # Spring settings
 spring:
     profiles.active: dev
@@ -30,3 +34,12 @@ spring:
             min-idle: 0
             max-active: 8
             max-wait: -1
+
+com.hp.sms.url: http://gw.api.tbsandbox.com/router/rest
+com.hp.sms.appkey: 1023309955
+com.hp.sms.secret: sandboxa4589aff503e51cf0695adedb
+com.hp.sms.signName: 身份验证
+com.hp.sms.smsTemplateCode: SMS_5037364
+# Spring
+spring.profiles.active: dev
+

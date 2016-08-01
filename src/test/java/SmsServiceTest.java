@@ -14,11 +14,11 @@ import java.io.UnsupportedEncodingException;
 /**
  * Created by luj on 2015/11/6.
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+//@RunWith(SpringJUnit4ClassRunner.class)
+//@SpringApplicationConfiguration(classes = Application.class)
 
 public class SmsServiceTest {
-    @Autowired
+  /*  @Autowired
     @Qualifier("cmppSender")
     SmsService cmppSms;
 
@@ -58,6 +58,6 @@ public class SmsServiceTest {
         String bytes="4E 2D 56 FD 00 41 00 42 00 43 00 44 00 45 00 46 00 31 00 32 00 33 00 34 00 35 00 36";
         System.out.println(MsgUtils.DecodeUCS2(bytes.replace(" ",""))+"|");
 
-    }
+    }*/
 
 }
