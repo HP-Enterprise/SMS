@@ -28,7 +28,7 @@ public class SmsController {
      * @param request 请求对象
      * @return  如果成功返回成功信息，如果失败返回失败信息
      */
-    @RequestMapping(value="/api/sms/message",method = RequestMethod.POST)
+  /*  @RequestMapping(value="/api/sms/message",method = RequestMethod.POST)
     public String sendSms(@RequestBody Sms sms , HttpServletRequest request) {
         RequestContext requestContext = new RequestContext(request);
         if (sms == null){
@@ -38,6 +38,6 @@ public class SmsController {
             cmppSms.sendSms(sms.getPhone(), sms.getMessage());
             return "send SMS success!";
         }
-    }
+    }*/
 
 }
