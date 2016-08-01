@@ -3,7 +3,6 @@ package com.hp.sms;
 import com.hp.sms.client.NettyClient;
 import com.hp.sms.domain.SharedInfo;
 import com.hp.sms.domain.SpInfo;
-import com.hp.sms.service.SimpleSMS;
 import com.hp.sms.utils.SmsDataTool;
 import com.hp.sms.utils.SmsSocketRedis;
 import org.slf4j.Logger;
