@@ -17,8 +17,6 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.hp.sms"} )
 public class Application implements CommandLineRunner {
-    @Autowired
-    private SimpleSMS _sms;
 
     @Value("${com.hp.cmpp.ismgIp}")
     private String _cmpp_ip;
