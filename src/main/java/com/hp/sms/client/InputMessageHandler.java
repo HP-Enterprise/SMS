@@ -47,7 +47,7 @@ public class InputMessageHandler extends ChannelInboundHandlerAdapter {
 	@Override
 	public void channelRead(ChannelHandlerContext ctx, Object msg)
 			throws Exception {
-		_logger.info("check deliver msg...");
+		//_logger.info("check deliver msg...");
 		ByteBuf m = (ByteBuf) msg;
 		byte[] receiveData= smsDataTool.getBytesFromByteBuf(m);
 		String receiveDataHexString= smsDataTool.bytes2hex(receiveData);
