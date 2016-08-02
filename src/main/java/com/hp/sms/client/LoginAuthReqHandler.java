@@ -77,7 +77,7 @@ public class LoginAuthReqHandler extends ChannelInboundHandlerAdapter {
 		ByteBuf m = (ByteBuf) msg;
 		byte[] receiveData= smsDataTool.getBytesFromByteBuf(m);
 		String receiveDataHexString= smsDataTool.bytes2hex(receiveData);
-		_logger.info("Receive date from " + ctx.channel().remoteAddress() + ">>>:" + receiveDataHexString);
+		//_logger.info("Receive date from " + ctx.channel().remoteAddress() + ">>>:" + receiveDataHexString);
 		//
 		MsgHead message=new MsgHead(receiveData);
 
