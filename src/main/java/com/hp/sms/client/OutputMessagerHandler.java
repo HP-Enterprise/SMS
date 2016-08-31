@@ -110,8 +110,12 @@ public class OutputMessagerHandler extends ChannelInboundHandlerAdapter {
 				//遍历待发数据,处理
 				String k=(String)keys.next();
 				String[] datas=k.split(":");
-				msgType=datas[1];
-				phone=datas[2];//取出目标号码
+				if(datas.length<3){//非法的短信
+					msgType=datas[1];
+					phone="";//取出目标号码
+				}else{
+					msgType=datas[1];
+					phone=datas[2];//取出目标号码
 				msgContent= smsSocketRedis.popSetOneString(k);
 			}
 			if(!phone.equals("")){
