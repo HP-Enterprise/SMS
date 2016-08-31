@@ -23,6 +23,9 @@ public class SimpleSMS implements ISms {
         if (sim == null || content==null){
             return 0;
         }else {
+            if(sim.length()!=11){
+                return 0;
+            }
             cmppSms.sendSms(sim, content);
             return 1;
         }
