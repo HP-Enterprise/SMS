@@ -21,8 +21,14 @@ public class CmppSender implements SmsService{
     @Override
     public int sendSms(String sim, String content) {
         _logger.info("handle txt sms to cmpp:" + sim + "|" + content);
-        smsSocketRedis.saveSetString(smsDataTool.smsout_preStr+smsDataTool.sms_txt_preStr+sim,content,-1);//消息推入redis
-        return RESULT_SUCCESS;
+        if(sim!=null){
+            if(sim.length()==11){
+                smsSocketRedis.saveSetString(smsDataTool.smsout_preStr + smsDataTool.sms_txt_preStr + sim, content, -1);//消息推入redis
+                return RESULT_SUCCESS;
+            }
+        }
+        _logger.info("sms to cmpp error:sim:" + sim + "|");
+        return RESULT_FAILURE;
     }
 
     @Override
