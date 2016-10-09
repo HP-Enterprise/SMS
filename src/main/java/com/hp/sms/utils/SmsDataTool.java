@@ -261,7 +261,7 @@ public class SmsDataTool {
         //基于netty
         byte[] result = new byte[buf.readableBytes()];
         buf.readBytes(result, 0, buf.readableBytes());
-        buf.resetReaderIndex();
+        buf.readerIndex(0);
         return result;
     }
     public   HashMap<String,String> getVinDataFromRegBytes(byte[] data)

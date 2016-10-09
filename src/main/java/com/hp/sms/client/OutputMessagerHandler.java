@@ -71,12 +71,15 @@ public class OutputMessagerHandler extends ChannelInboundHandlerAdapter {
 			}else{
 				_logger.info(">>>>>> not connected ");
 			}
+			m.release();
 		}else if (message.getCommandId() == MsgCommand.CMPP_SUBMIT_RESP) {
 			_logger.info("Client receive server submit resp message : ---> "
 					+ message);
 			reduceWriteCount();
-		}else
+			m.release();
+		}else {
 			ctx.fireChannelRead(msg);
+		}
 	}
 	public synchronized void reduceWriteCount(){
 		writeCount--;

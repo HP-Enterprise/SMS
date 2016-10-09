@@ -72,9 +72,11 @@ public class InputMessageHandler extends ChannelInboundHandlerAdapter {
 			_logger.info("Client send Deliver Resp message to server : ---> "
 					+ byteStr);
 			ctx.writeAndFlush(smsDataTool.getByteBuf(byteStr));
-			ctx.fireChannelRead(msg);
-		}else
-			ctx.fireChannelRead(msg);
+			//ctx.fireChannelRead(msg);
+		}else{
+			//ctx.fireChannelRead(msg);
+		}
+			m.release();
 		}
 
 	private MsgDeliverResp buildMsgDeliverResp() {
