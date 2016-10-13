@@ -58,7 +58,7 @@ public class InputMessageHandler extends ChannelInboundHandlerAdapter {
 
 			MsgDeliver msgDeliver=new MsgDeliver(receiveData);
 			_logger.info("Client receive server deliver message : ---> "
-					+msgDeliver.getSrc_terminal_Id().trim()+"|"+msgDeliver.getMsg_Fmt()+"|"+ msgDeliver.getMsg_Content());
+					+ msgDeliver.getSrc_terminal_Id().trim() + "|" + msgDeliver.getMsg_Fmt() + "|" + msgDeliver.getMsg_Content());
 			if(msgDeliver.getMsg_Fmt()==(byte)0x08){//二进制
 				smsSocketRedis.saveSetString(smsDataTool.smsin_preStr+smsDataTool.sms_bin_preStr+msgDeliver.getSrc_terminal_Id().trim(),msgDeliver.getMsg_Content(),-1);//消息hex推入redis
 			}else{//文本
@@ -72,9 +72,11 @@ public class InputMessageHandler extends ChannelInboundHandlerAdapter {
 			_logger.info("Client send Deliver Resp message to server : ---> "
 					+ byteStr);
 			ctx.writeAndFlush(smsDataTool.getByteBuf(byteStr));
-			ctx.fireChannelRead(msg);
-		}else
-			ctx.fireChannelRead(msg);
+			//ctx.fireChannelRead(msg);
+			m.release();
+		}else{
+			m.release();
+		}
 		}
 
 	private MsgDeliverResp buildMsgDeliverResp() {
