@@ -89,14 +89,16 @@ public class LoginAuthReqHandler extends ChannelInboundHandlerAdapter {
 	    int loginResult = (connectResp.getStatus());
 	    if (loginResult !=  0) {
 		// 握手失败，关闭连接
-		ctx.close();
+			ctx.close();
+			m.release();
 	    } else {
 			sharedInfo.setConnected(true);
 			_logger.info("Login is ok: " + sharedInfo.isConnected());
-		ctx.fireChannelRead(msg);
+			ctx.fireChannelRead(msg);
 	    }
-	} else
-	    ctx.fireChannelRead(msg);
+	} else {
+		ctx.fireChannelRead(msg);
+	}
     }
 
     private MsgHead buildLoginReq() {

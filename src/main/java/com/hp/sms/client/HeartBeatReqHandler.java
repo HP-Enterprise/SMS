@@ -74,6 +74,7 @@ public class HeartBeatReqHandler extends ChannelInboundHandlerAdapter {
 		//_logger.info("Client receive server heart beat message : ---> "
 			//  + message);
 		//ctx.fireChannelRead(msg);//真实运行不需要抛出心跳resp msg，目前为了便于检测收消息，暂时开启
+		m.release();
 	} else
 	    ctx.fireChannelRead(msg);
     }
