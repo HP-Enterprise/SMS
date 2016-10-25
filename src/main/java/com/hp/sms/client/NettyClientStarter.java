@@ -31,7 +31,7 @@ public class NettyClientStarter extends Thread{
     }
     public  void run()
     {
-        _logger.info("start NettyClient...");
+        _logger.info("正在启动短信服务...");
         try {
             new NettyClient(spInfo, sharedInfo, smsSocketRedis, smsDataTool).connect(_cmpp_port, _cmpp_ip);
         }catch (Exception e){e.printStackTrace();}

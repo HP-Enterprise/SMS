@@ -51,12 +51,12 @@ public class LoginAuthReqHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-		_logger.info(">>>>>>>>>>>>>>>>LoginAuthReqHandler channelActive");
+		//_logger.info(">>>>>>>>>>>>>>>>LoginAuthReqHandler channelActive");
 		if(sharedInfo.isConnected()==false){
-			_logger.info(">>>>>>>>>>>>>>>>do Connect");
+
 			MsgHead h=buildLoginReq();
 			String byteStr= smsDataTool.bytes2hex(h.toByteArry());
-			_logger.info(byteStr);
+			_logger.info("正在注册到短信网关 :---> "+byteStr);
 			ctx.writeAndFlush(smsDataTool.getByteBuf(byteStr));
 		}else{
 			_logger.info(">>>>>>>>>>>>>>>>not need to do Connect");
@@ -84,7 +84,7 @@ public class LoginAuthReqHandler extends ChannelInboundHandlerAdapter {
 	// 如果是握手应答消息，需要判断是否认证成功
 	if (message.getCommandId() == MsgCommand.CMPP_CONNECT_RESP
 		) {
-		_logger.info(">>>>>>>>>>>>>>>>CMPP_CONNECT_RESP");
+		_logger.info("收到短信网关注册响应信息");
 		MsgConnectResp connectResp=new MsgConnectResp(receiveData);
 	    int loginResult = (connectResp.getStatus());
 	    if (loginResult !=  0) {
@@ -93,7 +93,7 @@ public class LoginAuthReqHandler extends ChannelInboundHandlerAdapter {
 			m.release();
 	    } else {
 			sharedInfo.setConnected(true);
-			_logger.info("Login is ok: " + sharedInfo.isConnected());
+			_logger.info("短信服务注册成功: " + sharedInfo.isConnected());
 			ctx.fireChannelRead(msg);
 	    }
 	} else {

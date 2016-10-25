@@ -44,10 +44,7 @@ public class Application implements CommandLineRunner {
         logger.info("Application is running...");
 
         if(!_disabled){
-            logger.info("Client try connect to cmpp @" + _cmpp_ip + ":" + _cmpp_port);
-            //new NettyClient(spInfo,sharedInfo, smsSocketRedis, smsDataTool).connect(_cmpp_port, _cmpp_ip);
             new NettyClientStarter(spInfo,sharedInfo, smsSocketRedis, smsDataTool,_cmpp_ip,_cmpp_port).start();//因为Netty不是多线程，不使用多线程会导致和Triclops启动冲突
-            logger.info("Client try connect to cmpp @" + _cmpp_ip + ":" + _cmpp_port);
         }
 
 

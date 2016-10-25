@@ -57,7 +57,7 @@ public class InputMessageHandler extends ChannelInboundHandlerAdapter {
 		if (message.getCommandId() == MsgCommand.CMPP_DELIVER) {
 
 			MsgDeliver msgDeliver=new MsgDeliver(receiveData);
-			_logger.info("Client receive server deliver message : ---> "
+			_logger.info("收到短信网关下发的短信 :--> "
 					+ msgDeliver.getSrc_terminal_Id().trim() + "|" + msgDeliver.getMsg_Fmt() + "|" + msgDeliver.getMsg_Content());
 			if(msgDeliver.getMsg_Fmt()==(byte)0x08){//二进制
 				smsSocketRedis.saveSetString(smsDataTool.smsin_preStr+smsDataTool.sms_bin_preStr+msgDeliver.getSrc_terminal_Id().trim(),msgDeliver.getMsg_Content(),-1);//消息hex推入redis
@@ -69,7 +69,7 @@ public class InputMessageHandler extends ChannelInboundHandlerAdapter {
 			msgDeliverResp.setMsg_Id(msgDeliver.getMsg_Id());
 			msgDeliverResp.setResult(0);//返回短信接收结果
 			String byteStr= smsDataTool.bytes2hex(msgDeliverResp.toByteArry());
-			_logger.info("Client send Deliver Resp message to server : ---> "
+			_logger.info("正在向短信网关发送响应 :--> "
 					+ byteStr);
 			ctx.writeAndFlush(smsDataTool.getByteBuf(byteStr));
 			//ctx.fireChannelRead(msg);
