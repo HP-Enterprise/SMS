@@ -67,14 +67,13 @@ public class OutputMessagerHandler extends ChannelInboundHandlerAdapter {
 				outputMsg = ctx.executor().scheduleAtFixedRate(
 						new OutputMsgTask(ctx), 0, 100,
 						TimeUnit.MILLISECONDS);
-				_logger.info("------------------------------start OutputMsgTask");
+				_logger.info("正在启动消息发送任务");
 			}else{
 				_logger.info(">>>>>> not connected ");
 			}
 			m.release();
 		}else if (message.getCommandId() == MsgCommand.CMPP_SUBMIT_RESP) {
-			_logger.info("Client receive server submit resp message : ---> "
-					+ message);
+			_logger.info("收到短信发送响应");
 			reduceWriteCount();
 			m.release();
 		}else
@@ -82,11 +81,11 @@ public class OutputMessagerHandler extends ChannelInboundHandlerAdapter {
 	}
 	public synchronized void reduceWriteCount(){
 		writeCount--;
-		_logger.info(">>>>>>>>>>...writeCount="+writeCount);
+		_logger.info("滑窗计数器="+writeCount);
 	}
 	public synchronized void increaseWriteCount(){
 		writeCount++;
-		_logger.info(">>>>>>>>>>...writeCount=" + writeCount);
+		_logger.info("滑窗计数器=" + writeCount);
 	}
 	private class OutputMsgTask implements Runnable {
 		private final ChannelHandlerContext ctx;
@@ -98,7 +97,7 @@ public class OutputMessagerHandler extends ChannelInboundHandlerAdapter {
 		@Override
 		public  void run() {
 			if(writeCount>16){//参考CMPP3.0
-				_logger.info("send msg too quick...");
+				_logger.info("消息发送过快，网关要求滑窗限制，消息将会在稍后发送...");
 				return;
 			}
 			String msgType="";
@@ -106,7 +105,7 @@ public class OutputMessagerHandler extends ChannelInboundHandlerAdapter {
 			String msgContent="";
 			//读取redis中所有的待发短信集合 采用key-set存储
 			Set<String> setKey = smsSocketRedis.getKeysSet("smsoutput:*");
-			if(setKey.size()>0){   _logger.info( setKey.size()+" sms wait to be handle "); }
+			if(setKey.size()>0){   _logger.info( setKey.size()+" 条短信等待处理"); }
 			Iterator keys = setKey.iterator();
 			while (keys.hasNext()){
 				//遍历待发数据,处理
@@ -124,7 +123,7 @@ public class OutputMessagerHandler extends ChannelInboundHandlerAdapter {
 			if(!phone.equals("")){
 				MsgHead outMsg = buildTxtOutputMsg(msgType,phone, msgContent);
 				String byteStr= smsDataTool.bytes2hex(outMsg.toByteArry());
-				_logger.info("Client send submit message to server : ---> "
+				_logger.info("正在向短信网关发送短信请求 :---> "
 						+ byteStr);
 				ctx.writeAndFlush(smsDataTool.getByteBuf(byteStr));
 				increaseWriteCount();
@@ -132,7 +131,7 @@ public class OutputMessagerHandler extends ChannelInboundHandlerAdapter {
 		}
 		private MsgHead buildTxtOutputMsg(String msgType,String phone,String msgContent) {
 			//这部分的代码需要真实环境实测配置
-			_logger.info(phone+">>>>>send msg:"+msgContent);
+			_logger.info("目标手机号："+phone+">短信:"+msgContent);
 			String cusMsisdn=phone;
 			MsgSubmit submit=new MsgSubmit();
 			submit.setCommandId(MsgCommand.CMPP_SUBMIT);

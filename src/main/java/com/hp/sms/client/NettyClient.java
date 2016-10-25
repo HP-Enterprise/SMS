@@ -51,7 +51,7 @@ public class NettyClient {
 
     public void connect(int port, String host) throws Exception {
         // 配置客户端NIO线程组
-        _logger.info("try connect to server @"+host+":"+port);
+        _logger.info("正在尝试连接短信网关 @"+host+":"+port);
         try {
             Bootstrap b = new Bootstrap();
             b.group(group).channel(NioSocketChannel.class)

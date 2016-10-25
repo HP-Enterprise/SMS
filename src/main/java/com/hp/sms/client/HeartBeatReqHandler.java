@@ -65,7 +65,7 @@ public class HeartBeatReqHandler extends ChannelInboundHandlerAdapter {
 	    	heartBeat = ctx.executor().scheduleAtFixedRate(
 		    new HeartBeatTask(ctx), 0, 10000,
 		    TimeUnit.MILLISECONDS);
-			_logger.info("------------------------------start HeartBeatTask");
+			_logger.info("正在启动心跳任务");
 		}else{
 		_logger.info(">>>>>> not connected ");
 		}
