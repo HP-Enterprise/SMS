@@ -30,6 +30,10 @@ dependencies {
     compile("redis.clients:jedis:2.7.+")
     compile("io.netty:netty-all:4.0.31.Final")
     compile ("com.google.code.gson:gson:2.2.+")
+    compile("xml-security:xmlsec:1.0+")
+    compile("com.sun.xml.wss:xws-security:3.0"){
+        exclude group:'javax.xml.crypto', module:'xmldsig'
+    }
     testCompile("org.springframework.boot:spring-boot-starter-test:1.2+")
     testCompile("javax.servlet:servlet-api:2.4")
     compile files( 'lib/taobao-sdk-java-auto_1455552377940-20160216.jar')
