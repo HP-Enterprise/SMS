@@ -1,7 +1,8 @@
 package com.hp.sms;
-import com.hp.sms.service.SmsService;
-import org.slf4j.LoggerFactory;
+
+import com.hp.sms.service.ZJYSender;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -11,9 +12,13 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class SimpleSMS implements ISms {
+//    @Autowired
+//    @Qualifier("cmppSender")
+//    SmsService cmppSms;
+
     @Autowired
-    @Qualifier("cmppSender")
-    SmsService cmppSms;
+    @Qualifier("zjySender")
+    ZJYSender zjySender;
 
     private Logger _logger=LoggerFactory.getLogger(SimpleSMS.class);
 
@@ -26,7 +31,9 @@ public class SimpleSMS implements ISms {
             if(sim.length()!=11){
                 return 0;
             }
-            cmppSms.sendSms(sim, content);
+//            cmppSms.sendSms(sim, content);
+            //更改为中聚元短信接口
+            zjySender.sendSms(sim, content);
             return 1;
         }
     }
