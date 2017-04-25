@@ -14,6 +14,8 @@ import com.sun.xml.wss.XWSSProcessorFactory;
 import com.sun.xml.wss.XWSSecurityException;
 import com.sun.xml.wss.impl.callback.PasswordCallback;
 import com.sun.xml.wss.impl.callback.UsernameCallback;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
@@ -43,6 +45,8 @@ public class SendSMSClient {
     private String _msgid;
     private String _version;
     private String _soapheaderurl;
+
+    private Logger _logger= LoggerFactory.getLogger(SendSMSClient.class);
 
     /**
      * Constructor which initializes Soap Connection, messagefactory and ProcessorFactory
@@ -132,6 +136,7 @@ public class SendSMSClient {
             return "1";
         } else {
             SOAPFault fault = response.getSOAPBody().getFault();
+            _logger.info("SendSMSRequest接口调用失败:" + fault.getFaultCode() + "| " + fault.getFaultString());
             return fault.getFaultCode();
         }
     }
