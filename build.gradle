@@ -34,6 +34,7 @@ dependencies {
     compile("com.sun.xml.wss:xws-security:3.0"){
         exclude group:'javax.xml.crypto', module:'xmldsig'
     }
+    compile group: 'com.alibaba', name: 'fastjson', version: '1.2.39'
     testCompile("org.springframework.boot:spring-boot-starter-test:1.2+")
     testCompile("javax.servlet:servlet-api:2.4")
     compile files( 'lib/taobao-sdk-java-auto_1455552377940-20160216.jar')
