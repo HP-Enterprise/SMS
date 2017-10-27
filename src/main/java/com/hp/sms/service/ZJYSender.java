@@ -22,7 +22,9 @@ public class ZJYSender implements SmsService{
         if(sim!=null){
             if(sim.length()==11){
                 //所有短信服务均走http请求
-                int result=httpSmsSender.sendZJY(sim, content, "");
+//                int result=httpSmsSender.sendZJY(sim, content, "");
+                //中聚元新短信接口
+                int result=httpSmsSender.sendAPI(sim, content);
                 return result;
             }
         }

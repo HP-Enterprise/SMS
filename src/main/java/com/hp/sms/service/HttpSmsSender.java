@@ -3,6 +3,8 @@ package com.hp.sms.service;
 /**
  * Created by jackl on 2016/9/14.
  */
+import com.alibaba.fastjson.JSONObject;
+import com.hp.sms.utils.Sha1;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,6 +29,12 @@ public class HttpSmsSender {
     private String _smsUrl;
     @Value("${com.hp.zjy.sms.url}")
     private String _zjySmsUrl;
+    @Value("${com.hp.zjy.sms.newUrl}")
+    private String _newZjySmsUrl;
+    @Value("${com.hp.zjy.sms.cid}")
+    private Integer _cid;
+    @Value("${com.hp.zjy.sms.cipher}")
+    private String _cipher;
     @Value("${com.hp.zjy.sms.username}")
     private String _zjyUsername;
     @Value("${com.hp.zjy.sms.pasword}")
@@ -153,6 +161,70 @@ public class HttpSmsSender {
                     if(Integer.parseInt(num) > 0){
                         res = RESULT_SUCCESS;
                     }
+                }
+                return res;
+            }
+        } catch (MalformedURLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return RESULT_FAILURE;//success返回1 faild返回0
+    }
+
+    /**
+     * 新中聚元短信接口
+     * @param sim
+     * @param content
+     * @return
+     */
+    public int sendAPI(String sim, String content){
+        String sign = Sha1.getSha1(sim + content + _cipher);
+        String _url = _newZjySmsUrl + "?cid=" + _cid + "&mobile=" + sim + "&content=" + content + "&sign=" + sign;
+        try {
+            //建立连接
+            URL url = new URL(_url);
+            HttpURLConnection connection = (HttpURLConnection) url
+                    .openConnection();
+            connection.setDoOutput(true);
+            connection.setDoInput(true);
+            connection.setRequestMethod("GET");
+            connection.setUseCaches(false);
+            connection.setInstanceFollowRedirects(true);
+            connection.setRequestProperty("Content-Type", "application/json;charset=GB2312");
+            connection.connect();
+            //POST请求
+            OutputStreamWriter  out = new  OutputStreamWriter(connection.getOutputStream(), "GB2312");
+
+            out.flush();
+            out.close();
+            //读取响应
+            BufferedReader reader = new BufferedReader(new InputStreamReader(
+                    connection.getInputStream()));
+            String lines;
+            StringBuffer sb = new StringBuffer("");
+            while ((lines = reader.readLine()) != null) {
+                lines = new String(lines.getBytes(), "GB2312");
+                sb.append(lines);
+            }
+            _logger.info("sim短信发送结果:" + sb);
+
+            reader.close();
+            // 断开连接
+            connection.disconnect();
+            if (sb.equals(""))
+                return RESULT_FAILURE;
+            else{
+                JSONObject obj = JSONObject.parseObject(sb.toString());
+                String status = obj.getString("status");
+                int res = RESULT_FAILURE;
+                if("1".equals(status)){
+                    res = RESULT_SUCCESS;
                 }
                 return res;
             }
