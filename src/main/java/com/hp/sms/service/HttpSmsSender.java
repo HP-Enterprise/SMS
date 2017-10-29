@@ -185,8 +185,10 @@ public class HttpSmsSender {
      */
     public int sendAPI(String sim, String content){
         String sign = Sha1.getSha1(sim + content + _cipher);
-        String _url = _newZjySmsUrl + "?cid=" + _cid + "&mobile=" + sim + "&content=" + content + "&sign=" + sign;
+
         try {
+            String param = URLEncoder.encode(content, "UTF-8");
+            String _url = _newZjySmsUrl + "?cid=" + _cid + "&mobile=" + sim + "&content=" + param + "&sign=" + sign;
             //建立连接
             URL url = new URL(_url);
             HttpURLConnection connection = (HttpURLConnection) url
@@ -196,7 +198,7 @@ public class HttpSmsSender {
             connection.setRequestMethod("GET");
             connection.setUseCaches(false);
             connection.setInstanceFollowRedirects(true);
-            connection.setRequestProperty("Content-Type", "application/json;charset=GB2312");
+            connection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
             connection.connect();
             //POST请求
             OutputStreamWriter  out = new  OutputStreamWriter(connection.getOutputStream(), "GB2312");
