@@ -11,6 +11,3 @@ branches:
 cache:
     directories:
         - $HOME/.gradle
-
-script:
-    - gradle assemble
