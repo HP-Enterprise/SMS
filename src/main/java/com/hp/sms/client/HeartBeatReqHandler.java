@@ -20,7 +20,6 @@ import com.hp.sms.domain.MsgHead;
 import com.hp.sms.domain.SharedInfo;
 import com.hp.sms.domain.SpInfo;
 import com.hp.sms.utils.MsgUtils;
-
 import com.hp.sms.utils.SmsDataTool;
 import com.hp.sms.utils.SmsSocketRedis;
 import io.netty.buffer.ByteBuf;
