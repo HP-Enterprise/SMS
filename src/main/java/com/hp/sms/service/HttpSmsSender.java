@@ -3,22 +3,28 @@ package com.hp.sms.service;
 /**
  * Created by jackl on 2016/9/14.
  */
+
 import com.alibaba.fastjson.JSONObject;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.hp.sms.utils.Sha1;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.*;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 /**
  * 简单短信网关
  */
@@ -243,4 +249,31 @@ public class HttpSmsSender {
         return RESULT_FAILURE;//success返回1 faild返回0
     }
 
+    /**
+     * @param mobile  接收方手机号码
+     * @param msg 发送短信内容
+     * @return respstatus 响应状态值 0提交成功 101无此用户 102密码错 104系统忙 105敏感短信 106消息长度错 108手机号码个数错 109无发送额度
+     *                             110不在发送时间内 112无此产品 113extno格式错 115自动审核驳回 116签名不合法 117IP地址认证错 118用户没有相应的发送权限
+     *                             119用户已过期 120内容不在白名单模板中
+     */
+    public int sendMsg(String mobile, String msg) {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        MediaType type = MediaType.parseMediaType("application/x-www-form-urlencoded");
+        headers.setContentType(type);
+        headers.put("account", Collections.singletonList(_zjyUsername));
+        headers.put("pswd", Collections.singletonList(_zjyPassword));
+        headers.put("msg", Collections.singletonList(msg));
+        headers.put("mobile", Collections.singletonList(mobile));
+
+        String result = restTemplate.postForObject(_newZjySmsUrl, headers, String.class);
+        int resultOfInt = Integer.valueOf(result.split(",")[1]);
+        if (resultOfInt == 0){
+            resultOfInt = RESULT_SUCCESS ;
+        }else{
+            _logger.error("send mobile:"+mobile+", errorcode:"+resultOfInt);
+            resultOfInt = RESULT_FAILURE ;
+        }
+        return resultOfInt;
+    }
 }

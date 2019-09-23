@@ -24,7 +24,8 @@ public class ZJYSender implements SmsService{
                 //所有短信服务均走http请求
 //                int result=httpSmsSender.sendZJY(sim, content, "");
                 //中聚元新短信接口
-                int result=httpSmsSender.sendAPI(sim, content);
+                //int result=httpSmsSender.sendAPI(sim, content);
+                int result=httpSmsSender.sendMsg(sim, content);
                 return result;
             }
         }
