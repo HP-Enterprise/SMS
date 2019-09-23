@@ -263,7 +263,7 @@ public class HttpSmsSender {
         headers.setContentType(type);
         headers.put("account", Collections.singletonList(_zjyUsername));
         headers.put("pswd", Collections.singletonList(_zjyPassword));
-        headers.put("msg", Collections.singletonList(msg));
+        headers.put("msg", Collections.singletonList("【华晨汽车】"+msg));
         headers.put("mobile", Collections.singletonList(mobile));
 
         String result = restTemplate.postForObject(_newZjySmsUrl, headers, String.class);
